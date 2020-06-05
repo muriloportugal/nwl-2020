@@ -8,6 +8,7 @@ import axios from 'axios';
 import './styles.css';
 import logo from '../../assets/logo.svg';
 import api from '../../services/api';
+import Dropzone from '../../components/Dropzone';
 
 interface Item {
   id: number;
@@ -37,6 +38,8 @@ const CreatePoint = () => {
     whatsapp: '',
   });
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File>();
+
   const history = useHistory();
 
   // Busca localização
@@ -123,16 +126,21 @@ const CreatePoint = () => {
     const city = selectedCity;
     const [latitude, longitude] = selectedPosition;
     const items = selectedItems;
-    const data = {
-      name,
-      email,
-      whatsapp,
-      city,
-      uf,
-      latitude,
-      longitude,
-      items,
-    };
+    
+    const data = new FormData();
+
+    
+    data.append('name', name);
+    data.append('email', email);
+    data.append('whatsapp', whatsapp);
+    data.append('city', city);
+    data.append('uf', uf);
+    data.append('latitude', String(latitude));
+    data.append('longitude', String(longitude));
+    data.append('items', items.join(','));
+    if(selectedFile){
+      data.append('image',selectedFile);
+    }
 
     await api.post('points', data);
     alert('Ponto de coleta criado');
@@ -151,7 +159,10 @@ const CreatePoint = () => {
 
       <form onSubmit={handleSubmit}>
         <h1>Cadastro do<br/>ponto de coleta</h1>
+        
+        <Dropzone onFileUploaded={setSelectedFile}/>
 
+        {/* Dados */}
         <fieldset>
           <legend>
             <h2>Dados</h2>
@@ -188,7 +199,8 @@ const CreatePoint = () => {
             </div>
           </div>
         </fieldset>
-      
+
+        {/* Endereço */}
         <fieldset>
           <legend>
             <h2>Endereço</h2>
@@ -239,6 +251,7 @@ const CreatePoint = () => {
           </div>
         </fieldset>
 
+        {/* Itens coleta */}
         <fieldset>
           <legend>
             <h2>Ítens de Coleta</h2>

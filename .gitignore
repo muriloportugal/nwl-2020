@@ -1,6 +1,17 @@
 tmp/*
 !tmp/.gitkeep
 
+# images uploaded server project
+aulas/server/uploads/*
+!aulas/server/uploads/baterias.svg
+!aulas/server/uploads/eletronicos.svg
+!aulas/server/uploads/lampadas.svg
+!aulas/server/uploads/oleo.svg
+!aulas/server/uploads/organicos.svg
+!aulas/server/uploads/papeis-papelao.svg
+# database server project
+*.sqlite
+
 
 # Logs
 logs
